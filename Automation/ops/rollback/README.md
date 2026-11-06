@@ -1,11 +1,24 @@
-# Production Rollback Scripts
+# Production Rollback Scripts + Dashboard
 
-Battle-tested bash scripts for the most common production rollback scenarios a DevOps / Cloud Operations engineer faces.
+Battle-tested bash scripts for the most common production rollback scenarios a DevOps / Cloud Operations engineer faces, plus an interactive dashboard.
+
+## Quick Start
+
+```bash
+# Interactive CLI dashboard (recommended)
+./dashboard.sh
+
+# Or open the visual HTML dashboard
+open dashboard.html          # macOS
+xdg-open dashboard.html     # Linux
+```
 
 ## Structure
 
 ```
 Automation/ops/rollback/
+├── dashboard.sh                 # Interactive menu + status panel
+├── dashboard.html               # Visual reference dashboard
 ├── 01-k8s-deployment.sh
 ├── 02-asg-launch-template.sh
 ├── 03-terraform-state.sh
@@ -23,6 +36,20 @@ Automation/ops/rollback/
 ├── 15-orchestrated-rollback.sh
 └── README.md
 ```
+
+## Dashboard Features
+
+**`dashboard.sh`**
+- Colored interactive menu for all 15 scripts
+- Live environment status (kubectl context, AWS account/region, tool presence)
+- One-key launch of any rollback script
+- Quick open of the HTML dashboard
+
+**`dashboard.html`**
+- Clean dark-themed visual reference
+- Grouped by category (Application, AWS, State/Data, System)
+- Ready-to-copy command examples
+- Safety reminders
 
 ## Safety Principles
 

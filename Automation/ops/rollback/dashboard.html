@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citadel Platform — Rollback Dashboard</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a2332;
+      --border: #2d3a4f;
+      --text: #e7ecf3;
+      --muted: #8b9bb4;
+      --accent: #3b82f6;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --cyan: #06b6d4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    header h1 span { color: var(--cyan); }
+    .meta { color: var(--muted); font-size: 0.875rem; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge.k8s { background: #1e3a5f; color: #60a5fa; }
+    .badge.aws { background: #1c3d2e; color: #4ade80; }
+    .badge.infra { background: #3b2f1e; color: #fbbf24; }
+    .badge.db { background: #3b1e2e; color: #f472b6; }
+    .badge.sys { background: #2e1e3b; color: #c084fc; }
+    .card p {
+      color: var(--muted);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .cmd {
+      background: #0c1017;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #a5f3fc;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    .safety {
+      background: #1c1917;
+      border: 1px solid #44403c;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+    .safety strong { color: var(--yellow); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Citadel Platform <span>· Rollback Dashboard</span></h1>
+      <div class="meta">Production Ops Runbook &middot; 15 Real-World Scenarios</div>
+    </div>
+    <div class="meta" id="clock"></div>
+  </header>
+
+  <main>
+    <div class="safety">
+      <strong>Safety first:</strong> Always prefer dry-run / plan mode. Take backups before destructive actions.
+      Require explicit confirmation for state or data changes. Log every action and tag resources for audit.
+    </div>
+
+    <div class="section-title">Application & Orchestration</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">01 · Kubernetes Deployment</div>
+          <span class="badge k8s">K8s</span>
+        </div>
+        <p>Roll a Deployment back to the previous or a specific revision.</p>
+        <div class="cmd">./01-k8s-deployment.sh &lt;ns&gt; &lt;deploy&gt; [rev]</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">08 · Helm Release</div>
+          <span class="badge k8s">K8s</span>
+        </div>
+        <p>Helm rollback to previous or named revision.</p>
+        <div class="cmd">./08-helm-release.sh &lt;release&gt; [ns] [rev]</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">14 · ECS Service</div>
+          <span class="badge aws">AWS</span>
+        </div>
+        <p>Force ECS service onto a previous task definition.</p>
+        <div class="cmd">./14-ecs-service.sh &lt;cluster&gt; &lt;svc&gt; &lt;taskdef&gt;</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">09 · Docker Compose</div>
+          <span class="badge sys">Local</span>
+        </div>
+        <p>Roll a Compose service back to a previous image tag.</p>
+        <div class="cmd">./09-docker-compose.sh &lt;svc&gt; &lt;image:tag&gt;</div>
+      </div>
+    </div>
+
+    <div class="section-title">AWS Infrastructure</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">02 · ASG Launch Template</div>
+          <span class="badge aws">AWS</span>
+        </div>
+        <p>Point Auto Scaling Group to a previous Launch Template version.</p>
+        <div class="cmd">./02-asg-launch-template.sh &lt;asg&gt; &lt;lt-ver&gt;</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">05 · ALB Traffic Shift</div>
+          <span class="badge aws">AWS</span>
+        </div>
+        <p>Instantly shift 100% traffic back to the Blue target group.</p>
+        <div class="cmd">./05-alb-traffic-shift.sh &lt;listener&gt; &lt;blue&gt; &lt;green&gt;</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">06 · EC2 AMI Replacement</div>
+          <span class="badge aws">AWS</span>
+        </div>
+        <p>Launch a replacement instance from a known-good AMI.</p>
+        <div class="cmd">./06-ec2-ami.sh &lt;id&gt; &lt;ami&gt; &lt;subnet&gt; &lt;sg&gt; &lt;key&gt;</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">11 · Route53 DNS</div>
+          <span class="badge aws">AWS</span>
+        </div>
+        <p>Apply a previously saved change-batch for DNS rollback.</p>
+        <div class="cmd">./11-route53-dns.sh &lt;zone-id&gt; &lt;batch.json&gt;</div>
+      </div>
+    </div>
+
+    <div class="section-title">State, Data & Config</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">03 · Terraform State</div>
+          <span class="badge infra">IaC</span>
+        </div>
+        <p>Restore a known-good terraform.tfstate (with confirmation).</p>
+        <div class="cmd">./03-terraform-state.sh &lt;good-state&gt; [ws]</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">04 · Database Migration</div>
+          <span class="badge db">DB</span>
+        </div>
+        <p>Flyway-style undo to a target version (backup first).</p>
+        <div class="cmd">./04-db-migration.sh &lt;version&gt; [env]</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">07 · Config File</div>
+          <span class="badge sys">Config</span>
+        </div>
+        <p>Restore a config file from the newest timestamped backup.</p>
+        <div class="cmd">./07-config-file.sh &lt;file&gt; [backup-dir]</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">12 · Feature Flag</div>
+          <span class="badge sys">Config</span>
+        </div>
+        <p>Roll a feature flag / config value back via API.</p>
+        <div class="cmd">./12-feature-flag.sh &lt;key&gt; &lt;value&gt;</div>
+      </div>
+    </div>
+
+    <div class="section-title">System & Packages</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">10 · Package Version</div>
+          <span class="badge sys">OS</span>
+        </div>
+        <p>Install an exact previous package version (yum/dnf/apt).</p>
+        <div class="cmd">./10-package-version.sh &lt;pkg&gt; &lt;ver&gt;</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">13 · Systemd Unit</div>
+          <span class="badge sys">OS</span>
+        </div>
+        <p>Restore a unit file from backup and restart the service.</p>
+        <div class="cmd">./13-systemd-unit.sh &lt;unit&gt; [backup-dir]</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">15 · Orchestrated Rollback</div>
+          <span class="badge infra">Runbook</span>
+        </div>
+        <p>Coordinated multi-step sequence (traffic → app → DB → verify).</p>
+        <div class="cmd">./15-orchestrated-rollback.sh</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Citadel Platform &middot; Automation/ops/rollback &middot; Use with care in production
+  </footer>
+
+  <script>
+    function updateClock() {
+      document.getElementById('clock').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
